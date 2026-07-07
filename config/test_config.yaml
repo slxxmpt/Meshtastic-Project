@@ -1,0 +1,42 @@
+# ─── Mesh test bench configuration ──────────────────────────────────────────
+# Edit ports and node IDs to match YOUR hardware. Find them with:
+#   python -m tools.mesh_monitor --list-ports
+#   python -m tools.mesh_monitor --port COMx   (prints node IDs in the mesh)
+
+bench:
+  region: "US"            # US=915MHz, EU868=868MHz, etc. Must match firmware.
+  channel_name: "TestNet" # Meshtastic channel all nodes share
+  modem_preset: "LongFast"
+
+nodes:
+  local:
+    port: "COM5"          # Linux/mac e.g. /dev/ttyUSB0 ; Windows e.g. COM5
+    name: "Node-A"
+  peer:
+    node_id: "!a1b2c3d4"  # 8-hex Meshtastic node ID of the far node
+    name: "Node-B"
+  relay:
+    node_id: "!deadbeef"  # intermediate node for multi-hop tests (optional)
+    name: "Node-C"
+
+# ─── Pass/fail specifications (the "datasheet" we test against) ──────────────
+specs:
+  # Link quality thresholds. LoRa SNR floor for SF dependent; ~ -20 dB hard limit.
+  min_rssi_dbm: -115        # below this, link considered marginal
+  min_snr_db: -10           # below this, packets unlikely to decode
+  pdr_pass_pct: 95.0        # packet delivery ratio must meet/exceed this
+  max_link_latency_s: 8.0   # ack/echo round-trip ceiling for LongFast
+  max_hops_expected: 3      # routing should resolve within this hop count
+
+# ─── Test parameters ────────────────────────────────────────────────────────
+pdr_test:
+  packet_count: 50          # packets to send for delivery-ratio measurement
+  interval_s: 2.0           # spacing between packets (respect duty cycle!)
+
+range_test:
+  sample_interval_s: 5.0    # how often to log a link-quality sample
+  duration_s: 600           # total field-test logging window
+
+paths:
+  log_dir: "logs"
+  report_dir: "reports"

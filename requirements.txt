@@ -1,0 +1,15 @@
+# Meshtastic device API (serial / BLE / TCP interface to LoRa nodes)
+meshtastic>=2.3.0
+
+# Pub/sub used by the Meshtastic API for async packet reception
+pypubsub>=4.0.3
+
+# Test framework + HTML reporting
+pytest>=7.4
+pytest-html>=4.1
+
+# Config, data, and plotting
+PyYAML>=6.0
+numpy>=1.24
+pandas>=2.0
+matplotlib>=3.7
